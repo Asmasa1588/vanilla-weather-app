@@ -11,40 +11,43 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="src/style.css" />
     <title>vanilla weather app</title>
   </head>
   <body>
     <div class="container">
       <div class="weather-app">
-        <h1>New York</h1>
+        <h1 id="city"></h1>
         <ul>
-          <li>Tuesday 09:03 PM</li>
-          <li>Mostly cloudy</li>
+          <li>last update: <span id="date"></span></li>
+          <li id="description"></li>
         </ul>
         <div class="row"></div>
         <div class="col-9">
           <img
             src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png"
             alt="partly cloudy"
+            class="float-left"
           />
-          46°F|°C
+          <strong id="temperature"></strong>
+          <span class="unit">°F|<a href="#">°C</a></span>
         </div>
         <div class="col-9">
           <ul>
-            <li>Precipitation: 88%</li>
-            <li>Humidity: 57%</li>
-            <li>Wind: 3 mph</li>
+            <li>Humidity: <span id="humidity"></span>%</li>
+            <li>Wind:<span id="wind"></span> mph</li>
           </ul>
         </div>
-        <small
-          ><a href="https://github.com/Asmasa1588/vanilla-weather-app"
-            >open-source code</a
-          >
-          by Asma Sadiq</small
-        >
+
         <!-- <a href="" class="btn btn-primary">Click me</a> -->
       </div>
+      <small
+        ><a href="https://github.com/Asmasa1588/vanilla-weather-app"
+          >open-source code</a
+        >
+        by Asma Sadiq</small
+      >
     </div>
     <script src="src/index.js"></script>
   </body>
