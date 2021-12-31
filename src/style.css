@@ -60,7 +60,7 @@ li:first-letter {
 
 .weather-temperature .units {
   position: relative;
-  font-size: 16px;
+  font-size: 40px;
   top: -34px;
 }
 
