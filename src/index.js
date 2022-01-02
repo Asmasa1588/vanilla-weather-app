@@ -51,16 +51,22 @@
 // const form = document.querySelector("#search-form");
 // form.addEventListener("submit", search);
 
+const DEFAULT_UNIT = "imperial";
+selectedUnit = DEFAULT_UNIT;
+
+function formatAMPM(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  const strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+}
+
 function formatDate(timestamp) {
   let date = new Date(timestamp);
-  let hours = date.getHours();
-  if (hours < 10) {
-    hours = `0${hours}`;
-  }
-  let minutes = date.getMinutes();
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
-  }
 
   let days = [
     "Sunday",
@@ -72,7 +78,7 @@ function formatDate(timestamp) {
     "Saturday",
   ];
   let day = days[date.getDay()];
-  return `${day} ${hours}:${minutes}`;
+  return `${day} ${formatAMPM(date)}`;
 }
 
 function formatDay(timestamp) {
@@ -122,7 +128,7 @@ function displayForecast(response) {
 
 function getForecast(coordinates) {
   let apiKey = "c8396e2c418b55be7e0e0c31490694b7";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=${selectedUnit}`;
   axios.get(apiUrl).then(displayForecast);
 }
 
@@ -135,9 +141,9 @@ function displayTemperature(response) {
   let dateElement = document.querySelector("#date");
   let iconElement = document.querySelector("#icon");
 
-  celsiusTemperature = response.data.main.temp;
+  const temperature = response.data.main.temp;
 
-  temperatureElement.innerHTML = Math.round(celsiusTemperature);
+  temperatureElement.innerHTML = Math.round(temperature);
   cityElement.innerHTML = response.data.name;
   descriptionElement.innerHTML = response.data.weather[0].description;
   humidityElement.innerHTML = response.data.main.humidity;
@@ -152,9 +158,25 @@ function displayTemperature(response) {
   getForecast(response.data.coord);
 }
 
+const unitToMetricSignMapper = {
+  metric: "°C",
+  imperial: "°F",
+};
+
+function toggleUnits() {
+  const tempUnitElement = document.getElementById("temperature-unit");
+  const newUnit = selectedUnit === "imperial" ? "metric" : "imperial";
+  const newMetricSign = unitToMetricSignMapper[newUnit];
+
+  selectedUnit = newUnit;
+  tempUnitElement.innerHTML = newMetricSign;
+  const cityInputElement = document.querySelector("#city-input");
+  search(cityInputElement.value || "New York");
+}
+
 function search(city) {
   let apiKey = "5f472b7acba333cd8a035ea85a0d4d4c";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${selectedUnit}`;
   axios.get(apiUrl).then(displayTemperature);
 }
 
@@ -168,3 +190,5 @@ let form = document.querySelector("#search-form");
 form.addEventListener("submit", handleSubmit);
 
 search("New York");
+
+// `<div>`
